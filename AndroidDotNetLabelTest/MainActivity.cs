@@ -7,30 +7,7 @@ using static Android.Views.ViewGroup;
 
 namespace AndroidDotNetLabelTest {
 
-    public static class  GraphicsExtensions {
-        //====================================================================================
-        //FUNCTION COPIED FROM MAUI'S GRAPHICSEXTENSIONS FOR CHECKING LINES FOR MAX WIDTH
-        //====================================================================================
-        public static Vector2 GetTextSizeAsSizeF(this Android.Text.StaticLayout target, bool hasBoundedWidth) {
-            // We need to know if the static layout was created with a bounded width, as this is what
-            // StaticLayout.Width returns.
-            if (hasBoundedWidth)
-                return new Vector2(target.Width, target.Height);
-
-            float maxWidth = 0;
-            int lineCount = target.LineCount;
-
-            for (int i = 0; i < lineCount; i++) {
-                float lineWidth = target.GetLineWidth(i);
-                if (lineWidth > maxWidth) {
-                    maxWidth = lineWidth;
-                }
-            }
-            return new Vector2(maxWidth, target.Height);
-        }
-
-    }
-
+    
     [Activity(Label = "@string/app_name", MainLauncher = true)]
     public class MainActivity : Android.App.Activity {
         protected override void OnCreate(Bundle? savedInstanceState) {
@@ -92,14 +69,14 @@ namespace AndroidDotNetLabelTest {
                     //======================
                     if (absRoot.MeasuredWidth > 0 && absRoot.MeasuredHeight > 0) {
 
-                        //=================================
-                        //DEBUG TEXT SIZE ON SCREEN
-                        //=================================
+                        //=======================================================
+                        //DEBUG TEXT SIZE ON SCREEN -> RETURNS || 677 x 28 ||
+                        //=======================================================
                         Debug.WriteLine("TEXT SIZE  W" + text.Width + " H " + text.Height);
 
-                        //=================================
-                        //DEBUG STATIC LAYOUT 
-                        //=================================
+                        //======================================================
+                        //DEBUG STATIC LAYOUT -> RETURNS || 676.03125 x 28 ||
+                        //======================================================
                         StaticLayout staticLayout = new(testString, textPaint, maxWidth, Layout.Alignment.AlignNormal, 1, 0, true); //should be "true" here to get same height as textview
                         var staticLayoutSize = staticLayout.GetTextSizeAsSizeF(false); //IF THIS IS NOT FALSE RETURNS FULL WIDTH OF "MAX WIDTH = 5000"
                         Debug.WriteLine("STATIC LAYOUT W " + staticLayoutSize.X + " H " + staticLayoutSize.Y + " top pad " + staticLayout.TopPadding + " bot pad " + staticLayout.BottomPadding);
@@ -127,4 +104,29 @@ namespace AndroidDotNetLabelTest {
         //Debug.WriteLine("ASSET " + i + " " + assetList[i]); ;
         //}
     }
+
+    public static class GraphicsExtensions {
+        //====================================================================================
+        //FUNCTION COPIED FROM MAUI'S GRAPHICSEXTENSIONS FOR CHECKING LINES FOR MAX WIDTH
+        //====================================================================================
+        public static Vector2 GetTextSizeAsSizeF(this Android.Text.StaticLayout target, bool hasBoundedWidth) {
+            // We need to know if the static layout was created with a bounded width, as this is what
+            // StaticLayout.Width returns.
+            if (hasBoundedWidth)
+                return new Vector2(target.Width, target.Height);
+
+            float maxWidth = 0;
+            int lineCount = target.LineCount;
+
+            for (int i = 0; i < lineCount; i++) {
+                float lineWidth = target.GetLineWidth(i);
+                if (lineWidth > maxWidth) {
+                    maxWidth = lineWidth;
+                }
+            }
+            return new Vector2(maxWidth, target.Height);
+        }
+
+    }
+
 }
